@@ -12,7 +12,7 @@ licenseRead : "YES"
 # masterKeySeed will be used used for generating the master key and used for encrypting the secrets. It should be base64 encoded. #
 masterkey:
    creds: "masterkeycreds"
-   masterKeySeed: "ZmlyZXdhbGw="
+   masterKeySeed: "Q0FkZW1vMTIz"
 
 # By default, fullname uses '-. The below entry overrides that and uses the given string instead. #
 fullnameOverride: "casso"
@@ -81,13 +81,13 @@ sso:
 # if PS is in different cluster behind a loadbalancer, service field should be "<Hostname of Master Node of PS cluster>:<Load balancer port mapped to PolicyServer Service account port>".
 # policyserver.fipsmode specifies the FIPS MODE of Policy Server with which Access Gateway is going to be registered. The possible values are "COMPAT" for FIPS Compatible mode or "ONLY" for FIPS ONLY mode.
   policyserver:
-    service: ""
+    service: "cassoserver-siteminder-policy-server.sm.svc.cluster.local"
     fipsmode: "COMPAT"
 
 # Access Gateway Config Retriever Configuration #
 # configuration.type field can have one of the values  "local", "awsS3", "nfs" OR "git"
 # configuration.source field contains the path to the configuration folder in case of local, awsS3 and nfs. For structure of paths please refer to documentation
-# configuration.aws.creds specifies the handle to store AWS credentials. This can be left as it is
+# configurationobeta /aws.creds specifies the handle to store AWS credentials. This can be left as it is
 # configuration.aws.keyId specifies the key ID required to access the AWS bucket. It should be encrypted and encoded using smSecretEncrypter tool and masterKeySeed 
 # configuration.aws.accessKey specifies the access key required to access the AWS bucket. It should be encrypted and encoded using smSecretEncrypter tool and masterKeySeed 
 # configuration.aws.region specifies the region of aws bucket 
@@ -96,8 +96,8 @@ sso:
 # configuration.git.accessToken contains accesstoken of the above user.  It should be encrypted and encoded using smSecretEncrypter tool and masterKeySeed 
 # configuration.git.folderPath contains path to git folder containing configuration. For structure of paths please refer to documentation
   configuration:
-    type: "local"
-    source: ""
+    type: "git"
+    source: "https://github.com/epalomeras/accessgateway.git;master"
     aws:
       creds: "awscreds"
       keyId: ""
@@ -105,9 +105,9 @@ sso:
       region: ""
     git:
       creds: "gitcreds"
-      userName: ""
-      accessToken: ""
-      folderPath: ""
+      userName: "epalomeras"
+      accessToken: "MnNFMHZxNjNnbm9XbEwrSjk4c1hNbGE3aVpad05MdkhtRXBKako3VEU0anRiTEtGaWx3aGFkUjV6b1pTU3hHNnE4RXZrcEVXN2l5MDc5REhQR3hmcXlQUGlRdVZGYmlBSmUvQitoUmhYSXM9"
+      folderPath: "/accessgateway"
 
 # Access Gateway Runtime Config Retriever Configuration #
 # runtime.configuration.interval units are in minutes.
@@ -123,10 +123,10 @@ sso:
 # runtime.configuration.git.folderPath contains path to folder containing runtime configuration. For structure of paths please refer to documentation.
   runtime:
     configuration:
-      isEnable: "NO"
+      isEnable: "YES"
       interval: 600
-      type: "local"
-      source : ""
+      type: "git"
+      source : "https://github.com/epalomeras/"
       aws:
         creds: "runtimeawscreds"
         keyId: ""
@@ -134,9 +134,9 @@ sso:
         region: ""
       git:
         creds: "runtimegitcreds"
-        userName: ""
-        accessToken: ""
-        folderPath: ""
+        userName: "epalomeras"
+        accessToken: "MnNFMHZxNjNnbm9XbEwrSjk4c1hNbGE3aVpad05MdkhtRXBKako3VEU0anRiTEtGaWx3aGFkUjV6b1pTU3hHNnE4RXZrcEVXN2l5MDc5REhQR3hmcXlQUGlRdVZGYmlBSmUvQitoUmhYSXM9"
+        folderPath: "/accessgateway"
       resource:
         memoryRequest: 100Mi
         cpuRequest: 10m
@@ -162,8 +162,8 @@ sso:
 # accessGateway.hostentry.names contains space delimited hostnames to be mapped to above IP address
   accessGateway:
     hostentry: 
-      ip: ""
-      names: ""
+      ip: "34.89.48.108"
+      names: "casso.ca.local"
 
 # Access Gateway Liveness Readiness Probe Details #
 # livenessProbe.initialDelaySeconds specifies the delay in seconds after which the readiness probe for Access Gateway is launched once the container is up.
@@ -179,20 +179,20 @@ sso:
 
 # Access Gateway Hostname details #
 # publicHostName Specifies the server name entry in httpd.conf file and httpd-ssl.conf file.
-    publicHostName : ""
+    publicHostName : "agsso.ca.local"
 
 # Access Gateway Registration with Policy Server #
 # trustedHost specifies the trusted host name to be used while registering the access gateway with policy server.
 # aco specifies agent configuration object to be used while registering the access gateway with policy server.
 # hco specifies Host Configuration object to be used while registering the access gateway with policy server.
-    trustedHost : ""
+    trustedHost : "agsso.ca.local"
     enableSharedrollover: "NO"
-    aco : ""
-    hco : ""
+    aco : "AG"
+    hco : "AG"
 # Core/Crash dump file location
-    corePath: /corefiles/cores/
-# vhostNames specify the virtual host names that can be used to access Access Gateway #
-    vhostNames : ""
+    corePath: /tmp/corefiles/
+# vhostNames specify the virtual host names that can be used to access Access Gateway
+    vhostNames : "agsso.ca.local"
 # Enable or disable Access Gateway Agent . YES for enable (default), NO for disable. This should be kept "YES" for Access Gateway functionality to work.
     enableAgent : "YES"
 
@@ -212,13 +212,13 @@ sso:
 # ssl.verifyDepth is number which specifies how deeply to verify the certificate issuer chain before deciding the certificate is not valid.( This is not given in quotes).
 # ssl.keyPwd contains password of Server certificate key file.
       ssl:
-        enable : "NO"
-        certFile : ""
-        keyFile : ""
-        caFile : ""
-        verifyType : ""
-        verifyDepth : 
-        keyPwd : ""
+        enable : "YES"
+        certFile : "server.crt"
+        keyFile : "server.key"
+        caFile : "server.crt"
+        verifyType : "optional_no_ca"
+        verifyDepth : 4
+        keyPwd : "CAdemo123"
 # noodle.ssl.enable is to enable https communication with backend servers. It can be "NO" or "YES". If "YES", then remaining values are to be given.
 # noodle.ssl.clientKey specifies the private key file name of noodle client certificate.
 #   The client key file has to be placed in <config retriever root folder>/accessgateway/access-gateway/overlay/SSL/clientcert/key/.
@@ -235,7 +235,7 @@ sso:
 # service.port.http specifies the value for the external service port to access the Access Gateway URL over http.
 # service.port.https specifies the value for the external service port to access the Access Gateway URL over https.
     service:
-      type : "NodePort"
+      type : "LoadBalancer"
       port:
         http : 31090
         https : 31353
@@ -245,7 +245,7 @@ sso:
 # refer to documentation for ingress related information
 # ingress.enable can have values "YES" or "NO"(Default)
     ingress:
-      enable: "NO"
+      enable: "YES"
 
 # Access Gateway Custom Metrics Configuration #
 # ag.custommetrics.enabled specifies whether custom metrics collection is enabled in Access Gateway. Possible values are "YES" and "NO" ( default)
@@ -307,8 +307,9 @@ sso:
 # adminUserPassword specifies the siteminder admin password. It should be encrypted and encoded using smSecretEncrypter tool and masterKeySeed.
     regsecret:
       name : "regadmincreds"      
-  adminUserName : "SVE0bTFySm9KTjVtMGVnNVhLSnpFNDhqaEV0elNHVEM1SW9VeWdQNkxFZU9DTmIrNzNWYmZLM1lxOExVa09mbg=="
-  adminUserPassword : "NjNGa09DYVB6ZXhKMURxb3dhUnNlUUN4UHJzK29PTjVwREI2UXBxRXdpV3ZOSmtHVTV6ZXlhT2dWMWx4RzdoKw=="
+  adminUserName : "a0hwcGRoV3pCY2p3cXNaRGlLZStxRXNSOFJ6L1UxWVFwbHlRMGNUZWFGTEFTY2p5OWlGbXczaUhWM2ZudXhJWA=="
+  #admin
+  adminUserPassword : "SUhwL2RDajRHNmtWbnU4V0Rmd2JUR254eDZ3dEY2TzhaNTkwUmtpYUd1WW1ndXZjbUVnM0diRG9kdnVleDBtUQ=="
 
 
 
