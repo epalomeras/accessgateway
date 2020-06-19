@@ -1,0 +1,44 @@
+<!-- SiteMinder Encoding=UTF-8; -->
+@username=%USER%
+@smretries=0
+@smaltcreds=%idtoken%
+
+<html>
+<head>
+<title>Siteminder Login</title>
+
+<SCRIPT LANGUAGE="JavaScript">
+
+function resetCredFields() {
+    document.getElementById('idtoken').value=location.href;
+    document.LOGIN.submit();
+}
+
+</SCRIPT>
+
+</head>
+
+<body onLoad = "resetCredFields();">
+    <div class="container">
+        <div class="card card-container" id="loginFormDivId">
+            <form name="LOGIN" METHOD="POST" class="form-signin">
+                    <INPUT TYPE=HIDDEN NAME="SMENC" VALUE="$$SMENC$$">
+                    <INPUT type=HIDDEN name="SMLOCALE" value="US-EN">
+                    <input type="HIDDEN" name="USER" value="AuthHub">
+		    <input type="HIDDEN" name="idtoken" id="idtoken">
+                    <input type=HIDDEN name=target id="TARGET" value="$$target$$">
+                    <input type=HIDDEN name=smquerydata id="SMQUERYDATA" value="$$smquerydata$$">
+                    <input type=HIDDEN name=smauthreason id="SMAUTHREASON" value="$$smauthreason$$">
+                    <input type=HIDDEN name=smagentname id="SMAGENTNAME" value="$$smagentname$$">
+                    <input type=HIDDEN name=postpreservationdata value="$$postpreservationdata$$">
+                    <noscript>
+                    <button class="btn btn-lg btn-primary btn-block btn-signin"
+                    type="submit" >Click me!</button>
+                    </noscript>
+                    <h2> Please wait...</h2>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

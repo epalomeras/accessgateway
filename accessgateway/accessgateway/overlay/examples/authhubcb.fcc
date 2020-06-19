@@ -1,0 +1,114 @@
+<!-- SiteMinder Encoding=UTF-8; -->
+@username=%USER%
+@smretries=0
+@smaltcreds=%id_token%
+
+
+<html>
+<head>
+<title>Siteminder Login</title>
+
+
+<SCRIPT LANGUAGE="JavaScript">
+
+function processQueryString(input)
+  {
+        var result={}
+        //var querystring=(location.search.substr(1)).split("&");
+        querystring = input.split("&");
+        for(var i=0;i<querystring.length;i++)
+        {
+            var tmp=querystring[i].split("=");
+
+            if(tmp.length >0)
+            {
+               result[tmp[0]]=unescape(tmp[1]);
+            }
+        }
+        return result;
+  }
+  
+function resetCredFields()
+{
+document.getElementById('id_token').value=location.href;
+if(window.location.hash) {
+  // Fragment exists
+    var fragment = window.location.hash.substr(1);
+    //alert(fragment);
+    
+    var idtoken = fragment.substr(0,fragment.indexOf("&X-TRANSACTION-ID"));
+    var state = fragment.substr(fragment.indexOf("&state"), fragment.length);
+    
+    // alert(state);
+    
+    var result = processQueryString(state.substr(state.indexOf("?")+1, state.length) + "&" + idtoken);
+    
+    if(result["SMAUTHREASON"]) {
+        document.getElementById('SMAUTHREASON').value = 27;//result["SMAUTHREASON"];
+    }
+    if(result["TARGET"]) {
+        document.getElementById('TARGET').value = result["TARGET"];
+    }
+    if(result["SMQUERYDATA"]) {
+        document.getElementById('SMQUERYDATA').value = result["SMQUERYDATA"];
+    }
+    if(result["SMAGENTNAME"]) {
+        document.getElementById('SMAGENTNAME').value = result["SMAGENTNAME"];
+    }
+  /*  if(result["USER"]) {
+        document.getElementById('USER').value = result["USER"];
+    } */
+ 
+        document.getElementById('id_token').value = idtoken;
+        submitForm();
+    
+} else {
+  // Fragment doesn't exist
+ // var val = "smagentname=" + document.getElementById('smagentname').value;
+ // val = val + "&target=" + document.getElementById('target').value;
+ // val = val + "&smquerydata=" + document.getElementById('smquerydata').value;
+ // val = val + "&smauthreason=" + document.getElementById('smauthreason').value;
+ // val = val + "&USER=" + document.getElementById('USER').value;
+  //document.getElementById('idtoken').value=location.href;
+}
+
+}
+
+function submitForm()
+{
+     document.Login.submit();
+}
+
+</SCRIPT>
+
+</head>
+
+
+
+<body onLoad = "resetCredFields();">
+    <div class="container">
+    
+    <divclass="card card-container" id="waitDivId">
+            <br> <BR><h2> Please wait... </h2>
+    <form NAME="Login" METHOD="POST">
+<INPUT TYPE=HIDDEN NAME="SMENC" VALUE="$$SMENC$$">
+<INPUT type=HIDDEN name="SMLOCALE" value="US-EN">
+<input type="HIDDEN" name="id_token" id="id_token" size="30" style="margin-left: 1px">
+<input type=HIDDEN name=target id="TARGET" value="$$target$$">
+<input type=HIDDEN  name=smquerydata id="SMQUERYDATA" value="$$smquerydata$$">
+<input type=HIDDEN name=smauthreason id="SMAUTHREASON" value="$$smauthreason$$">
+<input type=HIDDEN name=smagentname id="SMAGENTNAME" value="$$smagentname$$">
+<input type=HIDDEN name=postpreservationdata value="$$postpreservationdata$$">
+<noscript><input type="button" value="Submit" onClick="submitForm();"><noscript>
+
+</form>
+
+    </div>
+    </div>
+    <!-- /container -->
+
+</body>
+
+</html>
+
+
